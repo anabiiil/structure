@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -40,6 +39,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // Added admin guard
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        // Added clinic guard
+        'clinic' => [
+            'driver' => 'session',
+            'provider' => 'clinics',
+        ],
     ],
 
     /*
@@ -64,7 +73,16 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
+        // Added admins provider
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+        // Added clinics provider
+        'clinics' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Clinic::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -97,6 +115,20 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        // Added admins password broker (optional)
+        'admins' => [
+            'provider' => 'admins',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        // Added clinics password broker (optional)
+        'clinics' => [
+            'provider' => 'clinics',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*
@@ -111,5 +143,4 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-
 ];
