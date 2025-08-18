@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name', 220);
             $table->foreignId('clinic_id')->constrained('clinics')->cascadeOnDelete();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
-            $table->decimal('latitude', 10, 7)->nullable()->after('status');
-            $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
             $table->string('status', 30)->default('active');
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
         });
     }

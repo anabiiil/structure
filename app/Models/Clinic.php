@@ -32,4 +32,19 @@ class Clinic extends Authenticatable
     {
         return $this->belongsToMany(Speciality::class, 'clinic_specialities')->withTimestamps();
     }
+
+    public function branches(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Branch::class);
+    }
+
+    public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ClinicService::class);
+    }
+
+    public function info(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ClinicInfo::class);
+    }
 }
