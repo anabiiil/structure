@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('clinic_specialities', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('clinic_id')->constrained('clinics')->cascadeOnDelete();
+            $table->foreignId('speciality_id')->constrained('specialities')->cascadeOnDelete();
+            $table->unique(['clinic_id','speciality_id']);
             $table->timestamps();
         });
     }

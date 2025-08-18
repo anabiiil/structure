@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specialties', function (Blueprint $table) {
+        Schema::create('specialities', function (Blueprint $table) { // aligned with model pluralization
             $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('specialities')->nullOnDelete();
+            $table->string('name', 220);
+            $table->text('desc')->nullable();
+            $table->string('logo')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specialties');
+        Schema::dropIfExists('specialities');
     }
 };
