@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 220);
-            $table->foreignId('clinic_id')->constrained('clinics')->cascadeOnDelete();
-            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
-            $table->decimal('latitude', 10, 7)->nullable()->after('status');
-            $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
+            $table->string('name', 180);
             $table->string('status', 30)->default('active');
             $table->timestamps();
         });
@@ -28,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('cities');
     }
 };
+
