@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\BranchServiceEnum; // added
 
 class Branch extends Model
 {
@@ -16,11 +17,13 @@ class Branch extends Model
         'status',
         'latitude',
         'longitude',
+        'service_type', // added
     ];
 
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
+        'service_type' => BranchServiceEnum::class, // added
     ];
 
     public function clinic()

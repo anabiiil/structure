@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('clinic_id')->constrained('clinics')->cascadeOnDelete();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
             $table->string('status', 30)->default('active');
+            $table->enum('service_type', \App\Enums\BranchServiceEnum::cases())->default(\App\Enums\BranchServiceEnum::SERVICE?->value);
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
