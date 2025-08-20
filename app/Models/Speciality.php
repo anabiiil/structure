@@ -26,4 +26,10 @@ class Speciality extends Model
     {
         return $this->hasMany(self::class, 'parent_id');
     }
+
+    // Doctors relationship
+    public function doctors(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Doctor::class);
+    }
 }

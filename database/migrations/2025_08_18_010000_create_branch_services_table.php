@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('branch_services', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
-            $table->foreignId('clinic_service_id')->constrained('clinic_services')->cascadeOnDelete();
-            $table->unique(['branch_id','clinic_service_id']);
+            $table->string('title', 220);
+            $table->text('description')->nullable();
+            $table->string('status', 30)->default('active');
+            $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
         });
     }
