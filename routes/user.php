@@ -10,5 +10,4 @@ Route::post('/login', [LoginController::class, 'login']);
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout']);
 });

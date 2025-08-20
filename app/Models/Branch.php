@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Enums\BranchServiceEnum; // added
+use App\Enums\BranchServiceEnum;
 
 class Branch extends Model
 {
@@ -17,13 +17,13 @@ class Branch extends Model
         'status',
         'latitude',
         'longitude',
-        'service_type', // added
+        'service_type',
     ];
 
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
-        'service_type' => BranchServiceEnum::class, // added
+        'service_type' => BranchServiceEnum::class,
     ];
 
     public function clinic()
@@ -36,7 +36,7 @@ class Branch extends Model
         return $this->belongsTo(City::class);
     }
 
-    // Added relation: a branch can have many clinic services
+     relation: a branch can have many clinic services
     public function clinicServices(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(ClinicService::class, 'branch_services')->withTimestamps();

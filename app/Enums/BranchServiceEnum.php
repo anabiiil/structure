@@ -6,5 +6,5 @@ enum BranchServiceEnum: string
 {
     case DOCTORS = 'doctors';
     case SERVICE = 'services';
-    case BOTH = 'both'; // added
+    case BOTH = 'both';
 }

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('clinics', function (Blueprint $table) {
             $table->id();
             $table->string('name', 220);
-            $table->string('clinic_name', 220); // added
-            $table->string('vat_number', 50)->nullable()->unique(); // added
+            $table->string('clinic_name', 220);
+            $table->string('vat_number', 50)->nullable()->unique();
             $table->string('email')->unique();
             $table->string('phone', 30)->nullable()->unique();
             $table->string('password');
-            $table->string('status', 30)->default('active'); // added
+            $table->string('status', 30)->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

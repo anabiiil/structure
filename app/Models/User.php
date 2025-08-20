@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MainUserStatusEnum;
+use App\Enums\GenderEnum;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,8 +25,9 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
+        'gender',
         'password',
-        'status', // added
+        'status',
     ];
 
     /**
@@ -48,7 +50,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'status' => MainUserStatusEnum::class, // added
+            'status' => MainUserStatusEnum::class,
+            'gender' => GenderEnum::class,
         ];
     }
 }
