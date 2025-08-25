@@ -4,59 +4,66 @@ namespace App\Http\Repositories;
 
 use App\Http\Repositories\Contracts\UserRepositoryInterface;
 use App\Models\User;
+use App\Enums\MainUserStatusEnum;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
+/**
+ *
+ */
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     /**
      * UserRepository constructor.
      */
-    public function __construct(User $user)
+    public function __construct(protected User $user)
     {
         parent::__construct($user);
     }
 
     /**
-     * Find user by email.
+     * Find a user by email address.
+     *
+     * @param string $email
+     * @return Model|null
      */
     public function findByEmail(string $email): ?User
     {
-        return $this->findBy(['email' => $email]);
+        return $this->findWhere(['email' => $email]);
     }
 
     /**
-     * Find user by phone.
+     * Find a user by a specific column.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return Model|null
+     */
+    public function findByCol(string $column, mixed $value): ?User
+    {
+        return $this->findWhere([$column => $value]);
+    }
+
+    /**
+     * Find a user by phone number.
+     *
+     * @param string $phone
+     * @return Model|null
      */
     public function findByPhone(string $phone): ?User
     {
-        return $this->findBy(['phone' => $phone]);
+        return $this->findWhere(['phone' => $phone]);
     }
 
     /**
-     * Get active users.
+     * Get all active users.
+     *
+     * @param array<string> $cols Columns to select
+     * @param array<string> $relations Relations to eager load
+     * @return Collection<int, User>
      */
-    public function getActiveUsers(array $cols = ['*'], array $relations = []): \Illuminate\Database\Eloquent\Collection
+    public function getActiveUsers(array $cols = ['*'], array $relations = []): Collection
     {
-        return $this->all($cols, $relations, ['status' => 'active']);
+        return $this->get($cols, $relations, ['status' => MainUserStatusEnum::ACTIVE]);
     }
-
-    /**
-     * Search users by name or email.
-     */
-    public function searchUsers(string $search, int $perPage = 15): \Illuminate\Pagination\LengthAwarePaginator
-    {
-        return $this->getModel()
-            ->where(function ($query) use ($search) {
-                $query->where('name', 'LIKE', "%{$search}%")
-                      ->orWhere('email', 'LIKE', "%{$search}%");
-            })
-            ->paginate($perPage);
     }
-
-    /**
-     * Get users by gender.
-     */
-    public function getUsersByGender(string $gender): \Illuminate\Database\Eloquent\Collection
-    {
-        return $this->all(['*'], [], ['gender' => $gender]);
-    }
-}
