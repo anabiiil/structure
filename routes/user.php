@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication routes
 Route::post('/register', [RegisterController::class, 'register']);
-Route::post('/login', [LoginController::class, 'login']);
+// i want to login with phone number, user add his phone number , if the number in db send otp code , else return error number is not exists
+Route::post('/login', [LoginController::class, 'checkLogin']);
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {

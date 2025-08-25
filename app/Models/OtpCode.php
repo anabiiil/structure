@@ -9,6 +9,7 @@ use Random\RandomException;
 
 class OtpCode extends Model
 {
+    public const EXPIRE_MIN = 10;
     /**
      * The attributes that are mass assignable.
      */
@@ -18,6 +19,7 @@ class OtpCode extends Model
         'type',
         'expires_at',
         'is_used',
+        'attempts',
         'verified_at',
     ];
 
@@ -95,6 +97,7 @@ class OtpCode extends Model
 
     /**
      * Create a new OTP for a phone number
+     * @throws RandomException
      */
     public static function createForPhone(
         string $phone,

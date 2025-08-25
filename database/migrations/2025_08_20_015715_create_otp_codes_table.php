@@ -12,12 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('otp_codes', function (Blueprint $table) {
+        Schema::create('otp_codes', static function (Blueprint $table) {
             $table->id();
             $table->string('phone', 20)->index(); // Phone number to send OTP to
             $table->string('code', 6); // 6-digit OTP code
             $table->enum('type', OtpTypeEnum::values())->default(OtpTypeEnum::VERIFICATION->value); // Purpose of OTP
             $table->timestamp('expires_at'); // When the OTP expires
+            $table->integer('attempts')->default(0); // Number of attempts to verify this OTP
             $table->boolean('is_used')->default(false); // Whether OTP has been used
             $table->timestamp('verified_at')->nullable(); // When OTP was verified
             $table->timestamps();
