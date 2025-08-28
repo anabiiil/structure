@@ -17,9 +17,13 @@ return new class extends Migration
             $table->string('clinic_name', 220);
             $table->string('vat_number', 50)->nullable()->unique();
             $table->string('email')->unique();
+            $table->string('license_number', 100)->nullable();
             $table->string('phone', 30)->nullable()->unique();
-            $table->string('password');
-            $table->string('status', 30)->default('active');
+            $table->string('whatsapp_number', 30)->nullable();
+            $table->text('google_map_location_url')->nullable();
+            $table->text('purpose_note')->nullable();
+            $table->string('password')->nullable();
+            $table->string('status', 30)->default('pending');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

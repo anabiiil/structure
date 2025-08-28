@@ -3,65 +3,65 @@
 namespace App\Http\Controllers\User\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Pipelines\Auth\GenerateOtpCode;
+use App\Http\Pipelines\Auth\SendOtpNotification;
+use App\Http\Pipelines\Auth\CheckPhoneExisting;
 use App\Http\Requests\User\Auth\LoginRequest;
 use App\Http\Requests\User\Auth\PhoneVerificationRequest;
+use App\Http\Repositories\Contracts\UserRepositoryInterface;
+use App\Http\Pipelines\Auth\PhoneVerificationPipeline;
+use App\Http\Pipelines\Auth\LoginPipeline;
 use App\Services\OTP\OtpService;
 use App\Helpers\ApiResponse;
 use App\Enums\OtpTypeEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
 
 class LoginController extends Controller
 {
     public function __construct(
-        protected OtpService $otpService
-
+        protected OtpService $otpService,
+        protected UserRepositoryInterface $userRepository,
+        protected Pipeline $pipeline,
+        protected LoginPipeline $loginPipeline
     )
     {
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
+        $credentials = $request->validated();
 
+        // Execute the login pipeline
+        return $this->loginPipeline->execute([
+            'credentials' => $credentials
+        ]);
     }
 
     /**
-     * Check if phone exists and send OTP for authentication
+     * Check Phone Exists and Send OTP to login
      */
-    public function verifyPhone(PhoneVerificationRequest $request)
+    public function verifyPhone(PhoneVerificationRequest $request): JsonResponse
     {
+        $data = $request->validated();
 
-
-        try {
-            $phone = $request->validated()['phone'];
-
-            // Find user by phone (validation already ensures it exists)
-            $user = User::where('phone', $phone)->first();
-
-            if (!$user) {
-                return ApiResponse::error('Phone number not found', 404);
-            }
-
-            // Generate OTP for login
-            $otpCode = $this->otpService->generate(
-                identifier: $phone,
-                type: OtpTypeEnum::LOGIN->value
-            );
-
-            // In a real application, you would send the OTP via SMS
-            // For now, we'll return it in the response (remove this in production)
-            return ApiResponse::success([
-                'message' => 'OTP sent successfully to your phone number',
-                'phone' => $phone,
-                'otp' => $otpCode, // Remove this line in production
-                'expires_in_minutes' => 5
-            ]);
-
-        } catch (\Exception $e) {
-            return ApiResponse::error('Failed to send OTP. Please try again.', 500);
-        }
+        return $this->pipeline
+            ->send($data)
+            ->through([
+                CheckPhoneExisting::class,
+                GenerateOtpCode::class,
+                SendOtpNotification::class,
+            ])
+            ->then(function ($data) {
+                // Final step - return success response
+                return ApiResponse::success([
+                    'message' => 'OTP sent successfully',
+                    'phone' => $data['phone'],
+                    'user_id' => $data['user']->id
+                ]);
+            });
     }
-
-
-
 }

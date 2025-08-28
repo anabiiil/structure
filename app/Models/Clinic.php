@@ -12,7 +12,7 @@ class Clinic extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'clinic_name', 'vat_number', 'email', 'phone', 'password', 'status'
+        'name', 'clinic_name', 'vat_number', 'email', 'phone', 'whatsapp_number', 'google_map_location_url', 'purpose_note', 'password', 'status'
     ];
 
     protected $hidden = [
